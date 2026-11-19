@@ -1,0 +1,9 @@
+name: Indie Cinema
+description: Warm and filmic — a charcoal lobby palette lit by marquee amber, a DM Serif display and typewriter showtimes. For independent cinemas and film houses.
+accent_color: "#e9b23c"
+preview_image: null
+
+content:
+  - { key: hero_image, label: "Hero / background image", type: image,    scope: setting }
+  - { key: tagline,    label: "Strapline",                type: text,     scope: setting, required: true }
+  - { key: home_intro, label: "Welcome blurb",            type: richtext, scope: snippet,  required: false }

@@ -1,0 +1,97 @@
+---
+layout: default
+title: Home
+---
+
+{% assign featured = site.data.featured_events | first %}
+{% if featured == nil %}{% assign featured = site.data.upcoming_events | first %}{% endif %}
+{%- comment -%} Editable (#1090): venue hero image overrides the featured-event image. {%- endcomment -%}
+{% assign hero_bg = site.data.settings.hero_image %}
+{% if hero_bg == nil and featured %}{% assign hero_bg = featured.image.medium | default: featured.image.thumb %}{% endif %}
+
+<section class="hero">
+  {% if hero_bg %}<div class="hero-media"><img src="{{ hero_bg }}" alt=""></div>{% endif %}
+  <div class="wrap hero-inner">
+    {% if featured %}
+      <p class="hero-kicker">{% if featured.category_label %}{{ featured.category_label }}{% elsif featured.genres.first %}{{ featured.genres.first }}{% else %}On stage{% endif %} · {{ featured.start_date | date: "%a %-d %b" }}</p>
+      <h1>{{ featured.name }}</h1>
+      {% if featured.short_description %}<p class="hero-lead">{{ featured.short_description | strip_html }}</p>{% endif %}
+      <div class="btn-row">
+        {% if featured.ticket_url %}<a class="btn btn-primary" href="{{ featured.ticket_url }}" target="_blank" rel="noopener">Book tickets</a>{% else %}<a class="btn btn-primary" href="/events/{{ featured.slug }}">Find out more</a>{% endif %}
+        <a class="btn btn-light" href="/events">Full programme</a>
+      </div>
+    {% else %}
+      {%- comment -%} Editable (#1090): strapline from venue.tagline. {%- endcomment -%}
+      <h1>{{ site.data.settings.name }}</h1>
+      <p class="hero-lead">{{ site.data.settings.tagline | default: "Live performance, music and film — all year round." }}</p>
+      <div class="btn-row"><a class="btn btn-primary" href="/events">Full programme</a></div>
+    {% endif %}
+  </div>
+</section>
+
+{%- comment -%} Editable callout (#1090): renders only when the venue sets the home_intro snippet. {%- endcomment -%}
+{% if site.data.snippets.home_intro %}
+<section class="section">
+  <div class="wrap">
+    <div class="intro">{{ site.data.snippets.home_intro }}</div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What's on</h2>
+      <a class="btn" href="/events">All events</a>
+    </div>
+
+    {% if site.data.upcoming_events.size > 0 %}
+      <div class="grid">
+        {% for event in site.data.upcoming_events limit: 6 %}
+          <article class="card">
+            <div class="card-img">
+              {% if event.image %}<img src="{{ event.image.thumb | default: event.image.medium }}" alt="{{ event.name }}">
+              {% else %}<div class="card-noimg">{{ event.name | slice: 0 }}</div>{% endif %}
+            </div>
+            <div class="card-body">
+              {% if event.category_label or event.genres.first %}<div class="card-cat">{{ event.category_label | default: event.genres.first }}</div>{% endif %}
+              <h3><a href="/events/{{ event.slug }}">{{ event.name }}</a></h3>
+              <div class="card-date">{{ event.start_date | date: "%a %-d %b %Y" }}{% if event.doors_time %} · {{ event.doors_time }}{% endif %}</div>
+              {% if event.short_description %}<p class="card-desc">{{ event.short_description | strip_html | truncate: 96 }}</p>{% endif %}
+              <div class="card-foot">
+                {% if event.ticket_url %}<a class="btn btn-ink" href="{{ event.ticket_url }}" target="_blank" rel="noopener">Tickets</a>
+                {% else %}<a class="btn" href="/events/{{ event.slug }}">Details</a>{% endif %}
+                {% if event.age_restriction %}<span class="tag">{{ event.age_restriction }}</span>{% endif %}
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color:var(--ink-70)">Nothing on sale right now — the next season lands soon.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if site.data.news_items.size > 0 %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>News</h2>
+      <a class="btn" href="/news">All news</a>
+    </div>
+    <div class="news-list">
+      {% for item in site.data.news_items limit: 3 %}
+        <article class="news-item">
+          <div class="{% if item.cover_image %}ni-img{% else %}ni-noimg{% endif %}">
+            {% if item.cover_image %}<img src="{{ item.cover_image.thumb | default: item.cover_image.medium }}" alt="{{ item.title }}">{% else %}{{ item.title | slice: 0 }}{% endif %}
+          </div>
+          <div class="news-date">{{ item.published_at | date: "%-d %b %Y" }}</div>
+          <h3><a href="/news/{{ item.slug }}">{{ item.title }}</a></h3>
+          {% if item.pull_quote %}<p class="news-quote">{{ item.pull_quote | strip_html | truncate: 110 }}</p>{% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

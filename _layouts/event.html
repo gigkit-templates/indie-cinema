@@ -1,0 +1,40 @@
+---
+layout: default
+---
+<article>
+  <section class="hero">
+    {% if page.image %}<div class="hero-media"><img src="{{ page.image.medium | default: page.image.thumb }}" alt=""></div>{% endif %}
+    <div class="wrap hero-inner">
+      {% if page.category_label or page.genres.first %}<span class="eyebrow">{{ page.category_label | default: page.genres.first }}</span>{% endif %}
+      <h1>{{ page.name }}</h1>
+      <div class="hero-meta">
+        {{ page.start_date | date: "%A %-d %B %Y" }}{% if page.doors_time %} · Doors {{ page.doors_time }}{% endif %}{% if page.start_time %} · {{ page.start_time }}{% endif %}
+      </div>
+      <div class="btn-row">
+        {% if page.ticket_url %}<a class="btn btn-primary" href="{{ page.ticket_url }}" target="_blank" rel="noopener">{% if page.ticket_price_display %}Tickets · {{ page.ticket_price_display }}{% else %}Book tickets{% endif %}</a>{% endif %}
+        {% if page.free_entry %}<span class="btn btn-ghost" style="border-color:var(--cream);color:var(--cream)">Free entry</span>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="display:grid;grid-template-columns:2fr 1fr;gap:48px">
+      <div class="prose">
+        {{ content }}
+        {% if page.lineup and page.lineup.size > 0 %}
+          <h3>Line-up</h3>
+          <ul>{% for act in page.lineup %}<li>{{ act.name }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <aside>
+        <div class="card" style="padding:0"><div class="card-body">
+          <div class="card-cat">Details</div>
+          <p class="card-date">{{ page.start_date | date: "%A %-d %B %Y" }}</p>
+          {% if page.age_restriction %}<p><span class="tag">{{ page.age_restriction }}</span></p>{% endif %}
+          {% for g in page.genres %}<span class="tag">{{ g }}</span>{% endfor %}
+          {% if page.ticket_url %}<div style="margin-top:1rem"><a class="btn btn-ink" href="{{ page.ticket_url }}" target="_blank" rel="noopener">Book now</a></div>{% endif %}
+        </div></div>
+      </aside>
+    </div>
+  </section>
+</article>

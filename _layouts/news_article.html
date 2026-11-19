@@ -1,0 +1,20 @@
+---
+layout: default
+---
+<article>
+  <section class="hero">
+    {% if page.cover_image %}<div class="hero-media"><img src="{{ page.cover_image.medium | default: page.cover_image.thumb }}" alt=""></div>{% endif %}
+    <div class="wrap hero-inner">
+      <span class="eyebrow">{{ page.category | default: "News" }}</span>
+      <h1>{{ page.title }}</h1>
+      <div class="hero-meta">{{ page.published_at | date: "%-d %B %Y" }}</div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      {% if page.pull_quote %}<p class="lede" style="max-width:70ch;margin-bottom:1.5rem">{{ page.pull_quote }}</p>{% endif %}
+      <div class="prose">{{ content }}</div>
+      <p style="margin-top:2rem"><a class="btn btn-ghost" href="/news">← All news</a></p>
+    </div>
+  </section>
+</article>

@@ -1,0 +1,26 @@
+---
+layout: default
+title: News
+---
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><h2>News</h2></div>
+    {% if site.data.news_items.size > 0 %}
+      <div class="news-list">
+        {% for item in site.data.news_items %}
+          <article class="news-item">
+            <div class="card-img">
+              {% if item.cover_image %}<img src="{{ item.cover_image.thumb | default: item.cover_image.medium }}" alt="{{ item.title }}">
+              {% else %}<div class="card-noimg">{{ item.title | slice: 0 }}</div>{% endif %}
+            </div>
+            <div class="news-date">{{ item.published_at | date: "%-d %b %Y" }}{% if item.category %} · {{ item.category }}{% endif %}</div>
+            <h3><a href="/news/{{ item.slug }}">{{ item.title }}</a></h3>
+            {% if item.pull_quote %}<p class="news-quote">{{ item.pull_quote | strip_html | truncate: 140 }}</p>{% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color:var(--ink-soft)">No news yet — watch this space.</p>
+    {% endif %}
+  </div>
+</section>

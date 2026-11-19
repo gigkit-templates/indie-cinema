@@ -1,0 +1,5 @@
+title: GigKit Site
+collections:
+  pages:
+    output: true
+    permalink: /:slug/
